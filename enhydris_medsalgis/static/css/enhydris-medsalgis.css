@@ -1,0 +1,3 @@
+#mapid.leaflet-grab:not(.leaflet-drag-target) {
+  cursor: default; /* Cursor is used both for grabbing and selecting */
+}

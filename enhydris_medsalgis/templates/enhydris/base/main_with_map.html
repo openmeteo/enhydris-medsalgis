@@ -1,0 +1,37 @@
+{% extends "enhydris/base/main_with_map-default.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block basecss %}
+  {{ block.super }}
+  {% if request.medsalgis.ows_url %}
+    <link href="{% static 'css/enhydris-medsalgis.css' %}" type="text/css" rel="stylesheet">
+  {% endif %}
+{% endblock %}
+
+{% block leaflet_plugins %}
+  {{ block.super }}
+  {% if request.medsalgis.ows_url %}
+    <script type="text/javascript" src="{% static 'js/vendor/TileLayer.Grayscale.js' %}"></script>
+  {% endif %}
+{% endblock %}
+
+{% block map_js %}
+  {{ block.super }}
+  {% if request.medsalgis.ows_url %}
+    <script type="text/javascript">
+      enhydris.mapViewport = {{ map_viewport|safe }};
+      enhydris.medsalgis = {
+          ows_url: "{{ request.medsalgis.ows_url }}",
+          strings: {
+            Watercourses: '{% trans "Streams" %}',
+            StandingWaters: '{% trans "Lakes" %}',
+            DrainageBasins06: '{% trans "Basins level 6" %}',
+            DrainageBasins07: '{% trans "Basins level 7" %}',
+          },
+      };
+    </script>
+    <script type="text/javascript" src="{% static 'js/vendor/betterwms.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/enhydris-medsalgis-map.js' %}"></script>
+  {% endif %}
+{% endblock %}
