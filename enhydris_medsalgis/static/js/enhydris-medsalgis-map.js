@@ -9,10 +9,14 @@ Object.assign(enhydris.map, {
 
   addGeoOverlayLayers() {
     const str = enhydris.medsalgis.strings;
-    this.addMedsalLayer('Watercourses', str.Watercourses, '#33CCFF', '⌇', false);
-    this.addMedsalLayer('StandingWaters', str.StandingWaters, '#33CCFF', '■', false);
-    this.addMedsalLayer('DrainageBasins06', str.DrainageBasins06, '#0066FF', '▮', false);
-    this.addMedsalLayer('DrainageBasins07', str.DrainageBasins07, '#0066FF', '▮', false);
+    const medsal_ows_url = enhydris.medsalgis.ows_url;
+    const bgr_de_ows_url = 'https://services.bgr.de/wms/grundwasser/ihme1500/';
+    this.addWmsLayer(medsal_ows_url, 'Watercourses', str.Watercourses, '#33CCFF', '⌇', false);
+    this.addWmsLayer(medsal_ows_url, 'StandingWaters', str.StandingWaters, '#33CCFF', '■', false);
+    this.addWmsLayer(medsal_ows_url, 'DrainageBasins06', str.DrainageBasins06, '#0066FF', '▮', false);
+    this.addWmsLayer(medsal_ows_url, 'DrainageBasins07', str.DrainageBasins07, '#0066FF', '▮', false);
+    this.addWmsLayer(bgr_de_ows_url, '2', str.AquiferType, '#FFFFFF', ' ', false);
+    this.addWmsLayer(bgr_de_ows_url, '7', str.SeawaterIntrusion, '#FFFFFF', ' ', false);
   },
 
   /* This is a replacement for BetterWMS's getFeatureInfoUrl() which adds the
@@ -48,8 +52,8 @@ Object.assign(enhydris.map, {
     return url + L.Util.getParamString(params, url, true);
   },
 
-  addMedsalLayer(name, legendText, legendSymbolColor, legendSymbol, initiallyVisible) {
-    const layer = L.tileLayer.betterWms(enhydris.medsalgis.ows_url, {
+  addWmsLayer(ows_url, name, legendText, legendSymbolColor, legendSymbol, initiallyVisible) {
+    const layer = L.tileLayer.betterWms(ows_url, {
       layers: name,
       format: 'image/png',
       transparent: true,
